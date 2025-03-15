@@ -12,6 +12,13 @@ app.get('/', (req, res) => {
     res.send('Hello World');
 });
 
+
+app.use(cors({
+    origin: "https://fronted-ai.vercel.app",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}))
+
 app.use('/ai', aiRoutes);
 
 app.post('/ai/execute-code', codeController.executeCode);
