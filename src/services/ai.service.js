@@ -1,6 +1,8 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_KEY);
+
+console.log("check that the gemini api key ",process.env.GOOGLE_GEMINI_KEY)
 const model = genAI.getGenerativeModel({
     model: "gemini-2.0-flash",
     systemInstruction: `
@@ -80,13 +82,15 @@ const model = genAI.getGenerativeModel({
 });
 
 
-async function generateContent(prompt,temperature = 0.2) {
-    const result = await model.generateContent(prompt,temperature);
-
-  //  console.log(result.response.text())
-
-    return result.response.text();
-
+async function generateContent(prompt, temperature = 0.2) {
+    try {
+        const result = await model.generateContent(prompt, temperature);
+        return result.response.text();
+    } catch (error) {
+        console.error("Error generating content:", error);
+        throw new Error("AI model failed to generate content");
+    }
 }
 
-module.exports = generateContent    
+module.exports = generateContent;
+  
